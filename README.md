@@ -1,4 +1,4 @@
-# 🎹 PianoFingeringGenerator Web Application
+# 🎹 PianoFingeringGenerator Web Application – Enhanced Edition
 
 A web-based piano fingering generation system powered by reinforcement learning. Upload MusicXML files and get AI-generated fingering suggestions - **runs entirely in your browser!**
 
@@ -9,6 +9,11 @@ A web-based piano fingering generation system powered by reinforcement learning.
 [English](#english) | [中文](#中文) | [日本語](#日本語)
 
 ---
+
+## 🎵 Live Demo
+ 
+**Try It Now**:  https://piano-fingering-generator-a05.vercel.app/
+
 
 ## English
 
@@ -549,3 +554,16 @@ If you find this project helpful, please consider giving it a star! ⭐
 **Made with ❤️ using TypeScript and Next.js**
 
 **Local Development URL**: http://localhost:3000
+
+
+## ⚠️ Copyright Notice
+
+© 2026 Jeffrey Zhou. All rights reserved.
+
+This repository and its contents are protected by copyright law.  
+No part of this project may be copied, reproduced, modified, or distributed without prior written permission from the author.
+
+Commercial use is strictly prohibited.
+
+
+*Built with ❤️ for music education*
