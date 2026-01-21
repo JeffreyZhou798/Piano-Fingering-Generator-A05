@@ -1,4 +1,4 @@
-# 🎹 PianoFingering.jl Web Application
+# 🎹 PianoFingeringGenerator Web Application
 
 A web-based piano fingering generation system powered by reinforcement learning. Upload MusicXML files and get AI-generated fingering suggestions - **runs entirely in your browser!**
 
