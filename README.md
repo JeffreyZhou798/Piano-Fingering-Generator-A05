@@ -1,4 +1,4 @@
-# 🎹 Piano Fingering Generator Web Application – Enhanced Edition 1.0
+# 🎹 Piano Fingering Generator Web Application – Enhanced Edition 1.1
 
 A web-based piano fingering generation system powered by **complete Dyna-Q reinforcement learning algorithm**. Upload MusicXML files and get AI-generated fingering suggestions - **runs entirely in your browser!**
 
@@ -41,7 +41,7 @@ A web-based piano fingering generation system powered by **complete Dyna-Q reinf
 - **📊 Real-time Progress**: Track processing status with live progress updates
 - **💻 Browser-Based**: Runs entirely in your browser - no server needed!
 - **💾 Smart Caching**: IndexedDB caching for instant results on repeated files
-- **⚡ Adaptive Performance**: Multi-core parallel training (4/2/1 cores)
+- **⚡ Efficient Processing**: Single-threaded execution optimized for browser environments
 - **🎨 Modern UI**: Clean, responsive interface built with Next.js and Tailwind CSS
 - **🆓 Free**: Zero cost deployment on Vercel
 
@@ -78,43 +78,46 @@ This implementation uses the **complete Dyna-Q algorithm**, combining model-base
 }
 ```
 
-#### Multi-Core Parallel Training
+#### Single-Threaded Execution
 
-**Device-Adaptive Strategy:**
+**Efficient Training Strategy:**
 
-| Device Type | CPU Cores | Workers | Episodes/Worker | Total Training |
-|------------|-----------|---------|-----------------|----------------|
-| High-end PC | ≥8 cores | 4 | 2,500 | 10,000 |
-| Mid-range PC | 4-7 cores | 2 | 5,000 | 10,000 |
-| Low-end PC | <4 cores | 1 | 10,000 | 10,000 |
-| Mobile | Any | 1 | 10,000 | 10,000 |
+The system uses a single-threaded approach optimized for browser environments:
 
-**Q-Table Merging:**
-- Simple averaging of Q-values from multiple workers
-- Based on ensemble learning theory
-- Reduces variance and improves robustness
+| Device Type | Processing Mode       |
+| ----------- | --------------------- |
+| All Devices | Single-threaded       |
+| Desktop     | Synchronous execution |
+| Mobile      | Synchronous execution |
+
+**Advantages:**
+
+- Simplified implementation for better compatibility
+- Consistent performance across all devices
+- Lower memory footprint
+- No thread synchronization overhead
 
 ### 📊 Performance Metrics
 
 #### Processing Time
 
-| File Complexity | Notes | Processing Time | Quality |
-|----------------|-------|-----------------|---------|
-| Simple | 10-30 notes | 10-20 seconds | Excellent |
-| Medium | 50-100 notes | 40-80 seconds | Excellent |
-| Complex | 200+ notes | 100-180 seconds | Very Good |
-| Cached Files | Any | <1 second | Instant |
+| File Complexity | Notes        | Processing Time | Quality   |
+| --------------- | ------------ | --------------- | --------- |
+| Simple          | 10-30 notes  | 10-20 seconds   | Excellent |
+| Medium          | 50-100 notes | 40-80 seconds   | Excellent |
+| Complex         | 200+ notes   | 100-180 seconds | Very Good |
+| Cached Files    | Any          | <1 second       | Instant   |
 
 *First processing trains the model. Subsequent uploads of the same file use cached results.*
 
 #### Quality Comparison
 
-| Metric | Basic Q-Learning | Dyna-Q (This) | Original Julia |
-|--------|-----------------|---------------|----------------|
-| Error Rate | 30-40% | **10-15%** | 0-5% |
-| Physical Feasibility | 95% | **99%** | 100% |
-| Comfort Score | 6/10 | **8/10** | 9/10 |
-| Training Updates | 5,000 | **550,000** | 550,000 |
+| Metric               | Basic Q-Learning | Dyna-Q (This) | Original Julia |
+| -------------------- | ---------------- | ------------- | -------------- |
+| Error Rate           | 30-40%           | **10-15%**    | 0-5%           |
+| Physical Feasibility | 95%              | **99%**       | 100%           |
+| Comfort Score        | 6/10             | **8/10**      | 9/10           |
+| Training Updates     | 5,000            | **550,000**   | 550,000        |
 
 ### 🚀 Quick Start
 
@@ -125,23 +128,27 @@ Visit the live demo: https://piano-fingering-generator-a05.vercel.app/
 #### 💻 Local Development
 
 1. **Clone the repository**
+
 ```bash
 git clone https://github.com/JeffreyZhou798/Piano-Fingering-Generator-A05.git
 cd Piano-Fingering-Generator-A05
 ```
 
 2. **Install dependencies**
+
 ```bash
 cd frontend
 npm install
 ```
 
 3. **Start development server**
+
 ```bash
 npm run dev
 ```
 
 4. **Open your browser**
+
 ```
 http://localhost:3000
 ```
@@ -171,10 +178,10 @@ http://localhost:3000
 │              │                       │
 │              ▼                       │
 │  ┌───────────────────────────────┐  │
-│  │  Web Worker                   │  │
+│  │  Main Thread Processor        │  │
 │  │  - MusicXML Parser            │  │
 │  │  - Dyna-Q Algorithm           │  │
-│  │  - Parallel Training          │  │
+│  │  - Single-threaded Training   │  │
 │  │  - Fingering Generator        │  │
 │  └───────────┬───────────────────┘  │
 │              │                       │
@@ -216,9 +223,6 @@ Piano-Fingering-Generator-A05/
 │   │   │   ├── cache/          # Caching layer
 │   │   │   │   └── indexedDB.ts # IndexedDB wrapper
 │   │   │   └── i18n.ts         # Internationalization
-│   │   └── workers/
-│   │       ├── dynaQ.worker.ts # Dyna-Q Worker (NEW)
-│   │       └── fingering.worker.ts # Main Worker
 │   └── public/                 # Static assets
 ├── CompositionExamples/        # Sample MusicXML files
 ├── src.jl-backend/             # Original Julia reference
@@ -235,20 +239,20 @@ Piano-Fingering-Generator-A05/
 
 **Test Files (12 files in CompositionExamples/):**
 
-| # | File Name | Type | Right Hand | Left Hand | Status |
-|---|-----------|------|-----------|-----------|--------|
-| 1 | simple_test.musicxml | Simple | 4 | 4 | ✅ Tested |
-| 2 | simple_test2.mxl | Simple | 4 | 4 | ✅ Tested |
-| 3 | S1_Bach_G_Major.musicxml | Bach | 66 | 59 | ✅ Tested |
-| 4 | S1_Bach_G_Major2.mxl | Bach | 66 | 59 | ✅ Tested |
-| 5 | S6_no_5.musicxml | Etude | 95 | 167 | ✅ Tested |
-| 6 | S6_no_5-2.mxl | Etude | 95 | 167 | ✅ Tested |
-| 7 | Waltz.musicxml | Waltz | 109 | 103 | ✅ Tested |
-| 8 | Waltz2.mxl | Waltz | 109 | 103 | ✅ Tested |
-| 9 | S8_wedding.musicxml | Wedding | 180 | 77 | ✅ Tested |
-| 10 | S8_wedding2.mxl | Wedding | 180 | 77 | ✅ Tested |
-| 11 | S9_turkish_march.musicxml | Turkish | 143 | 116 | ✅ Tested |
-| 12 | S9_turkish_march2.mxl | Turkish | 143 | 116 | ✅ Tested |
+| #    | File Name                 | Type    | Right Hand | Left Hand | Status   |
+| ---- | ------------------------- | ------- | ---------- | --------- | -------- |
+| 1    | simple_test.musicxml      | Simple  | 4          | 4         | ✅ Tested |
+| 2    | simple_test2.mxl          | Simple  | 4          | 4         | ✅ Tested |
+| 3    | S1_Bach_G_Major.musicxml  | Bach    | 66         | 59        | ✅ Tested |
+| 4    | S1_Bach_G_Major2.mxl      | Bach    | 66         | 59        | ✅ Tested |
+| 5    | S6_no_5.musicxml          | Etude   | 95         | 167       | ✅ Tested |
+| 6    | S6_no_5-2.mxl             | Etude   | 95         | 167       | ✅ Tested |
+| 7    | Waltz.musicxml            | Waltz   | 109        | 103       | ✅ Tested |
+| 8    | Waltz2.mxl                | Waltz   | 109        | 103       | ✅ Tested |
+| 9    | S8_wedding.musicxml       | Wedding | 180        | 77        | ✅ Tested |
+| 10   | S8_wedding2.mxl           | Wedding | 180        | 77        | ✅ Tested |
+| 11   | S9_turkish_march.musicxml | Turkish | 143        | 116       | ✅ Tested |
+| 12   | S9_turkish_march2.mxl     | Turkish | 143        | 116       | ✅ Tested |
 
 **Testing Steps:**
 
@@ -264,7 +268,7 @@ Piano-Fingering-Generator-A05/
 
 ```
 🚀 开始新的指法生成（使用Dyna-Q算法）
-Using 1 worker(s) for parallel training
+Starting single-threaded training
 On Iteration 300, Returns: XXX.XX
 On Iteration 600, Returns: XXX.XX
 Converged at episode XXX
@@ -282,6 +286,7 @@ Open `START_DEBUG.html` in your browser for a guided debugging experience.
 **Method 1**: Click "Clear Cache (Debug)" button on the page
 
 **Method 2**: Run in browser console:
+
 ```javascript
 indexedDB.deleteDatabase('PianoFingeringDB').then(() => location.reload())
 ```
@@ -293,6 +298,7 @@ indexedDB.deleteDatabase('PianoFingeringDB').then(() => location.reload())
 The TypeScript implementation preserves 100% of the original Julia algorithm logic with complete Dyna-Q implementation:
 
 **Core Dyna-Q Algorithm:**
+
 - ε-greedy exploration policy
 - Q-value update formula: `Q(s,a) += α * (r + γ * max(Q(s',a')) - Q(s,a))`
 - Model learning: `Model[(s,a)] = (s', r)`
@@ -302,6 +308,7 @@ The TypeScript implementation preserves 100% of the original Julia algorithm log
 - Learning rate: 0.99, Exploration rate: 0.8
 
 **Reward Function (Preserved Exactly):**
+
 - Single finger strength scoring
 - Hand movement distance calculation
 - Finger stretch rate evaluation
@@ -309,6 +316,7 @@ The TypeScript implementation preserves 100% of the original Julia algorithm log
 - Chord range consideration
 
 **Helper Functions (All Preserved):**
+
 - `key_distance`: Keyboard distance calculation
 - `relative_position`: Note position on keyboard
 - `hand_move_distance`: Hand movement calculation
@@ -324,7 +332,7 @@ The TypeScript implementation preserves 100% of the original Julia algorithm log
 - Edge 90+ ✅
 
 Requires:
-- Web Workers support
+
 - IndexedDB support
 - ES2020+ features
 
@@ -333,6 +341,7 @@ Requires:
 #### Deployment Verification ✓
 
 Build Status: **SUCCESS**
+
 - Static export: ✓ Generated in `frontend/out/`
 - Configuration: ✓ All files correct
 - Dependencies: ✓ All installed
@@ -353,6 +362,7 @@ The app will be automatically deployed and available at your Vercel URL.
 #### GitHub Pages
 
 1. Build the static site:
+
 ```bash
 cd frontend
 npm run build
@@ -386,10 +396,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 This project is based on the original [PianoFingering.jl](https://github.com/Nero-Blackstone/PianoFingering.jl) research.
 
 **Original Research:**
+
 - Reinforcement learning algorithm for piano fingering
 - Dyna-Q implementation for MDP-based fingering generation
 
 **Open Source Libraries:**
+
 - Next.js - React framework
 - TypeScript - Type-safe JavaScript
 - Tailwind CSS - Utility-first CSS framework
@@ -398,6 +410,7 @@ This project is based on the original [PianoFingering.jl](https://github.com/Ner
 - idb - IndexedDB wrapper
 
 **Community:**
+
 - Julia community for scientific computing ecosystem
 - TypeScript and Next.js communities
 - All open-source contributors
@@ -434,7 +447,7 @@ This project is based on the original [PianoFingering.jl](https://github.com/Ner
 - **📊 实时进度**: 实时追踪处理状态
 - **💻 浏览器运行**: 完全在浏览器中运行 - 无需服务器！
 - **💾 智能缓存**: IndexedDB 缓存，重复文件秒开
-- **⚡ 自适应性能**: 多核并行训练（4/2/1核自适应）
+- **⚡ 高效处理**: 针对浏览器环境优化的单线程执行
 - **🎨 现代界面**: 基于 Next.js 和 Tailwind CSS 的清爽界面
 - **🆓 完全免费**: 零成本部署在 Vercel
 
@@ -471,43 +484,46 @@ This project is based on the original [PianoFingering.jl](https://github.com/Ner
 }
 ```
 
-#### 多核并行训练
+#### 单线程执行
 
-**设备自适应策略：**
+**高效训练策略：**
 
-| 设备类型 | CPU核心 | Worker数量 | 每Worker轮数 | 总训练量 |
-|---------|---------|-----------|-------------|---------|
-| 高端PC | ≥8核 | 4 | 2,500 | 10,000 |
-| 中端PC | 4-7核 | 2 | 5,000 | 10,000 |
-| 低端PC | <4核 | 1 | 10,000 | 10,000 |
-| 移动设备 | 任意 | 1 | 10,000 | 10,000 |
+系统使用针对浏览器环境优化的单线程方法：
 
-**Q表合并：**
-- 多个Worker的Q值简单平均
-- 基于集成学习理论
-- 降低方差，提高鲁棒性
+| 设备类型 | 处理模式 |
+| -------- | -------- |
+| 所有设备 | 单线程   |
+| 桌面设备 | 同步执行 |
+| 移动设备 | 同步执行 |
+
+**优势：**
+
+- 实现简单，兼容性更好
+- 所有设备性能一致
+- 更低的内存占用
+- 无线程同步开销
 
 ### 📊 性能指标
 
 #### 处理时间
 
-| 文件复杂度 | 音符数 | 处理时间 | 质量 |
-|-----------|-------|---------|------|
-| 简单 | 10-30音符 | 10-20秒 | 优秀 |
-| 中等 | 50-100音符 | 40-80秒 | 优秀 |
-| 复杂 | 200+音符 | 100-180秒 | 很好 |
-| 缓存文件 | 任意 | <1秒 | 秒开 |
+| 文件复杂度 | 音符数     | 处理时间  | 质量 |
+| ---------- | ---------- | --------- | ---- |
+| 简单       | 10-30音符  | 10-20秒   | 优秀 |
+| 中等       | 50-100音符 | 40-80秒   | 优秀 |
+| 复杂       | 200+音符   | 100-180秒 | 很好 |
+| 缓存文件   | 任意       | <1秒      | 秒开 |
 
 *首次处理训练模型。相同文件的后续上传使用缓存结果。*
 
 #### 质量对比
 
-| 指标 | 基础Q-Learning | Dyna-Q（本项目） | 原始Julia |
-|------|---------------|----------------|----------|
-| 错误率 | 30-40% | **10-15%** | 0-5% |
-| 物理可行性 | 95% | **99%** | 100% |
-| 舒适度评分 | 6/10 | **8/10** | 9/10 |
-| 训练更新次数 | 5,000 | **550,000** | 550,000 |
+| 指标         | 基础Q-Learning | Dyna-Q（本项目） | 原始Julia |
+| ------------ | -------------- | ---------------- | --------- |
+| 错误率       | 30-40%         | **10-15%**       | 0-5%      |
+| 物理可行性   | 95%            | **99%**          | 100%      |
+| 舒适度评分   | 6/10           | **8/10**         | 9/10      |
+| 训练更新次数 | 5,000          | **550,000**      | 550,000   |
 
 ### 🚀 快速开始
 
@@ -518,23 +534,27 @@ This project is based on the original [PianoFingering.jl](https://github.com/Ner
 #### 💻 本地开发
 
 1. **克隆仓库**
+
 ```bash
 git clone https://github.com/JeffreyZhou798/Piano-Fingering-Generator-A05.git
 cd Piano-Fingering-Generator-A05
 ```
 
 2. **安装依赖**
+
 ```bash
 cd frontend
 npm install
 ```
 
 3. **启动开发服务器**
+
 ```bash
 npm run dev
 ```
 
 4. **打开浏览器**
+
 ```
 http://localhost:3000
 ```
@@ -556,20 +576,20 @@ http://localhost:3000
 
 **测试文件（CompositionExamples/ 中的12个文件）：**
 
-| # | 文件名 | 类型 | 右手 | 左手 | 状态 |
-|---|--------|------|------|------|------|
-| 1 | simple_test.musicxml | 简单 | 4 | 4 | ✅ 已测试 |
-| 2 | simple_test2.mxl | 简单 | 4 | 4 | ✅ 已测试 |
-| 3 | S1_Bach_G_Major.musicxml | 巴赫 | 66 | 59 | ✅ 已测试 |
-| 4 | S1_Bach_G_Major2.mxl | 巴赫 | 66 | 59 | ✅ 已测试 |
-| 5 | S6_no_5.musicxml | 练习曲 | 95 | 167 | ✅ 已测试 |
-| 6 | S6_no_5-2.mxl | 练习曲 | 95 | 167 | ✅ 已测试 |
-| 7 | Waltz.musicxml | 华尔兹 | 109 | 103 | ✅ 已测试 |
-| 8 | Waltz2.mxl | 华尔兹 | 109 | 103 | ✅ 已测试 |
-| 9 | S8_wedding.musicxml | 婚礼 | 180 | 77 | ✅ 已测试 |
-| 10 | S8_wedding2.mxl | 婚礼 | 180 | 77 | ✅ 已测试 |
-| 11 | S9_turkish_march.musicxml | 土耳其 | 143 | 116 | ✅ 已测试 |
-| 12 | S9_turkish_march2.mxl | 土耳其 | 143 | 116 | ✅ 已测试 |
+| #    | 文件名                    | 类型   | 右手 | 左手 | 状态     |
+| ---- | ------------------------- | ------ | ---- | ---- | -------- |
+| 1    | simple_test.musicxml      | 简单   | 4    | 4    | ✅ 已测试 |
+| 2    | simple_test2.mxl          | 简单   | 4    | 4    | ✅ 已测试 |
+| 3    | S1_Bach_G_Major.musicxml  | 巴赫   | 66   | 59   | ✅ 已测试 |
+| 4    | S1_Bach_G_Major2.mxl      | 巴赫   | 66   | 59   | ✅ 已测试 |
+| 5    | S6_no_5.musicxml          | 练习曲 | 95   | 167  | ✅ 已测试 |
+| 6    | S6_no_5-2.mxl             | 练习曲 | 95   | 167  | ✅ 已测试 |
+| 7    | Waltz.musicxml            | 华尔兹 | 109  | 103  | ✅ 已测试 |
+| 8    | Waltz2.mxl                | 华尔兹 | 109  | 103  | ✅ 已测试 |
+| 9    | S8_wedding.musicxml       | 婚礼   | 180  | 77   | ✅ 已测试 |
+| 10   | S8_wedding2.mxl           | 婚礼   | 180  | 77   | ✅ 已测试 |
+| 11   | S9_turkish_march.musicxml | 土耳其 | 143  | 116  | ✅ 已测试 |
+| 12   | S9_turkish_march2.mxl     | 土耳其 | 143  | 116  | ✅ 已测试 |
 
 ### ⚙️ 技术细节
 
@@ -578,6 +598,7 @@ http://localhost:3000
 TypeScript实现保留了原始Julia算法逻辑的100%，并完整实现了Dyna-Q算法：
 
 **核心 Dyna-Q 算法：**
+
 - ε-贪心探索策略
 - Q值更新公式：`Q(s,a) += α * (r + γ * max(Q(s',a')) - Q(s,a))`
 - 模型学习：`Model[(s,a)] = (s', r)`
@@ -594,7 +615,7 @@ TypeScript实现保留了原始Julia算法逻辑的100%，并完整实现了Dyna
 - Edge 90+ ✅
 
 需要：
-- Web Workers 支持
+
 - IndexedDB 支持
 - ES2020+ 特性
 
@@ -603,10 +624,12 @@ TypeScript实现保留了原始Julia算法逻辑的100%，并完整实现了Dyna
 本项目基于原始的 [PianoFingering.jl](https://github.com/Nero-Blackstone/PianoFingering.jl) 研究。
 
 **原始研究：**
+
 - 钢琴指法的强化学习算法
 - 基于MDP的Dyna-Q指法生成实现
 
 **开源库：**
+
 - Next.js - React框架
 - TypeScript - 类型安全的JavaScript
 - Tailwind CSS - 实用优先的CSS框架
@@ -641,7 +664,7 @@ TypeScript实现保留了原始Julia算法逻辑的100%，并完整实现了Dyna
 - **📊 リアルタイム進捗**: 処理状況をライブで追跡
 - **💻 ブラウザベース**: ブラウザで完全に実行 - サーバー不要！
 - **💾 スマートキャッシング**: IndexedDB キャッシングで繰り返しファイルは即座に結果表示
-- **⚡ 適応パフォーマンス**: マルチコア並列トレーニング（4/2/1コア適応）
+- **⚡ 効率的処理**: ブラウザ環境に最適化されたシングルスレッド実行
 - **🎨 モダン UI**: Next.js と Tailwind CSS で構築されたクリーンでレスポンシブなインターフェース
 - **🆓 無料**: Vercel での無料デプロイ
 
@@ -678,43 +701,46 @@ TypeScript实现保留了原始Julia算法逻辑的100%，并完整实现了Dyna
 }
 ```
 
-#### マルチコア並列トレーニング
+#### シングルスレッド実行
 
-**デバイス適応戦略：**
+**効率的なトレーニング戦略：**
 
-| デバイスタイプ | CPUコア | ワーカー数 | ワーカーごとのエピソード | 総トレーニング |
-|-------------|---------|----------|---------------------|-------------|
-| ハイエンドPC | ≥8コア | 4 | 2,500 | 10,000 |
-| ミッドレンジPC | 4-7コア | 2 | 5,000 | 10,000 |
-| ローエンドPC | <4コア | 1 | 10,000 | 10,000 |
-| モバイル | 任意 | 1 | 10,000 | 10,000 |
+ブラウザ環境に最適化されたシングルスレッドアプローチを使用しています：
 
-**Qテーブルマージ：**
-- 複数のワーカーからのQ値の単純平均
-- アンサンブル学習理論に基づく
-- 分散を減らし、ロバスト性を向上
+| デバイスタイプ | 処理モード       |
+| -------------- | ---------------- |
+| 全デバイス     | シングルスレッド |
+| デスクトップ   | 同期実行         |
+| モバイル       | 同期実行         |
+
+**利点：**
+
+- 実装がシンプルで互換性が高い
+- すべてのデバイスで一貫したパフォーマンス
+- メモリ使用量が低い
+- スレッド同期のオーバーヘッドがない
 
 ### 📊 パフォーマンス指標
 
 #### 処理時間
 
-| ファイルの複雑さ | 音符数 | 処理時間 | 品質 |
-|---------------|-------|---------|------|
-| シンプル | 10-30音符 | 10-20秒 | 優秀 |
-| 中程度 | 50-100音符 | 40-80秒 | 優秀 |
-| 複雑 | 200+音符 | 100-180秒 | 非常に良い |
-| キャッシュファイル | 任意 | <1秒 | 即座 |
+| ファイルの複雑さ   | 音符数     | 処理時間  | 品質       |
+| ------------------ | ---------- | --------- | ---------- |
+| シンプル           | 10-30音符  | 10-20秒   | 優秀       |
+| 中程度             | 50-100音符 | 40-80秒   | 優秀       |
+| 複雑               | 200+音符   | 100-180秒 | 非常に良い |
+| キャッシュファイル | 任意       | <1秒      | 即座       |
 
 *初回処理でモデルをトレーニング。同じファイルの後続アップロードはキャッシュ結果を使用。*
 
 #### 品質比較
 
-| 指標 | 基本Q-Learning | Dyna-Q（本プロジェクト） | オリジナルJulia |
-|------|---------------|---------------------|---------------|
-| エラー率 | 30-40% | **10-15%** | 0-5% |
-| 物理的実現可能性 | 95% | **99%** | 100% |
-| 快適性スコア | 6/10 | **8/10** | 9/10 |
-| トレーニング更新回数 | 5,000 | **550,000** | 550,000 |
+| 指標                 | 基本Q-Learning | Dyna-Q（本プロジェクト） | オリジナルJulia |
+| -------------------- | -------------- | ------------------------ | --------------- |
+| エラー率             | 30-40%         | **10-15%**               | 0-5%            |
+| 物理的実現可能性     | 95%            | **99%**                  | 100%            |
+| 快適性スコア         | 6/10           | **8/10**                 | 9/10            |
+| トレーニング更新回数 | 5,000          | **550,000**              | 550,000         |
 
 ### 🚀 クイックスタート
 
@@ -725,23 +751,27 @@ TypeScript实现保留了原始Julia算法逻辑的100%，并完整实现了Dyna
 #### 💻 ローカル開発
 
 1. **リポジトリをクローン**
+
 ```bash
 git clone https://github.com/JeffreyZhou798/Piano-Fingering-Generator-A05.git
 cd Piano-Fingering-Generator-A05
 ```
 
 2. **依存関係をインストール**
+
 ```bash
 cd frontend
 npm install
 ```
 
 3. **開発サーバーを起動**
+
 ```bash
 npm run dev
 ```
 
 4. **ブラウザを開く**
+
 ```
 http://localhost:3000
 ```
@@ -763,30 +793,32 @@ http://localhost:3000
 
 **テストファイル（CompositionExamples/ の12ファイル）：**
 
-| # | ファイル名 | タイプ | 右手 | 左手 | ステータス |
-|---|-----------|--------|------|------|----------|
-| 1 | simple_test.musicxml | シンプル | 4 | 4 | ✅ テスト済み |
-| 2 | simple_test2.mxl | シンプル | 4 | 4 | ✅ テスト済み |
-| 3 | S1_Bach_G_Major.musicxml | バッハ | 66 | 59 | ✅ テスト済み |
-| 4 | S1_Bach_G_Major2.mxl | バッハ | 66 | 59 | ✅ テスト済み |
-| 5 | S6_no_5.musicxml | 練習曲 | 95 | 167 | ✅ テスト済み |
-| 6 | S6_no_5-2.mxl | 練習曲 | 95 | 167 | ✅ テスト済み |
-| 7 | Waltz.musicxml | ワルツ | 109 | 103 | ✅ テスト済み |
-| 8 | Waltz2.mxl | ワルツ | 109 | 103 | ✅ テスト済み |
-| 9 | S8_wedding.musicxml | ウェディング | 180 | 77 | ✅ テスト済み |
-| 10 | S8_wedding2.mxl | ウェディング | 180 | 77 | ✅ テスト済み |
-| 11 | S9_turkish_march.musicxml | トルコ行進曲 | 143 | 116 | ✅ テスト済み |
-| 12 | S9_turkish_march2.mxl | トルコ行進曲 | 143 | 116 | ✅ テスト済み |
+| #    | ファイル名                | タイプ       | 右手 | 左手 | ステータス   |
+| ---- | ------------------------- | ------------ | ---- | ---- | ------------ |
+| 1    | simple_test.musicxml      | シンプル     | 4    | 4    | ✅ テスト済み |
+| 2    | simple_test2.mxl          | シンプル     | 4    | 4    | ✅ テスト済み |
+| 3    | S1_Bach_G_Major.musicxml  | バッハ       | 66   | 59   | ✅ テスト済み |
+| 4    | S1_Bach_G_Major2.mxl      | バッハ       | 66   | 59   | ✅ テスト済み |
+| 5    | S6_no_5.musicxml          | 練習曲       | 95   | 167  | ✅ テスト済み |
+| 6    | S6_no_5-2.mxl             | 練習曲       | 95   | 167  | ✅ テスト済み |
+| 7    | Waltz.musicxml            | ワルツ       | 109  | 103  | ✅ テスト済み |
+| 8    | Waltz2.mxl                | ワルツ       | 109  | 103  | ✅ テスト済み |
+| 9    | S8_wedding.musicxml       | ウェディング | 180  | 77   | ✅ テスト済み |
+| 10   | S8_wedding2.mxl           | ウェディング | 180  | 77   | ✅ テスト済み |
+| 11   | S9_turkish_march.musicxml | トルコ行進曲 | 143  | 116  | ✅ テスト済み |
+| 12   | S9_turkish_march2.mxl     | トルコ行進曲 | 143  | 116  | ✅ テスト済み |
 
 ### 🙏 クレジット
 
 このプロジェクトは、オリジナルの [PianoFingering.jl](https://github.com/Nero-Blackstone/PianoFingering.jl) 研究に基づいています。
 
 **オリジナル研究：**
+
 - ピアノ運指のための強化学習アルゴリズム
 - MDPベースのDyna-Q運指生成実装
 
 **オープンソースライブラリ：**
+
 - Next.js - Reactフレームワーク
 - TypeScript - 型安全なJavaScript
 - Tailwind CSS - ユーティリティファーストCSSフレームワーク
