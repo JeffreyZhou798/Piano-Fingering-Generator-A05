@@ -1,4 +1,4 @@
-# 🎹 Piano Fingering Generator Web Application – Enhanced Edition
+# 🎹 Piano Fingering Generator Web Application – Enhanced Edition 1.0
 
 A web-based piano fingering generation system powered by **complete Dyna-Q reinforcement learning algorithm**. Upload MusicXML files and get AI-generated fingering suggestions - **runs entirely in your browser!**
 
